@@ -1,7 +1,6 @@
 <?php
-namespace App\Services;
+namespace App\Services\Midtrans;
 use \Midtrans\Snap;
-use PhpParser\Node\Stmt\TryCatch;
 
 class CreateSnapTokenService extends Midtrans{
 

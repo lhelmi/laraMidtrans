@@ -53,15 +53,16 @@ class MidtransRepository extends Repository
 
         foreach ($data['detail'] as $key => $value) {
             try {
-                $product = new Order();
-                $product->user_id = 2;
-                $product->product_id = $value['id'];
-                $product->merchant_id = $value['merchant_id'];
-                $product->quantity = $value['quantity_amount'];
-                $product->gross_amount = $value['total'];
-                $product->price = $value['price'];
+                $order = new Order();
+                $order->user_id = 2;
+                $order->product_id = $value['id'];
+                $order->merchant_id = $value['merchant_id'];
+                $order->quantity = $value['quantity_amount'];
+                $order->gross_amount = $value['total'];
+                $order->price = $value['price'];
+                $order->status = 0;
 
-                $product->save();
+                $order->save();
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return parent::response(false, $th->getMessage(), null);
@@ -70,5 +71,17 @@ class MidtransRepository extends Repository
 
         DB::commit();
         return parent::response(true, "order saved", null);
+    }
+
+    public function updateOrderById($id, $param){
+        DB::beginTransaction();
+        try {
+            Order::where('id', $id)->update($param);
+            DB::commit();
+            return parent::response(true, "order updated", null);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return parent::response(false, $th->getMessage(), null);
+        }
     }
 }

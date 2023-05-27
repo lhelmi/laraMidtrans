@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Services\Midtrans;
 
 use App\Repositories\Repository;
 use \Midtrans\Config;

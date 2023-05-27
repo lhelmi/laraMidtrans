@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Validation\MidtransValidation;
 use App\Repositories\MidtransRepository;
-use App\Services\CreateSnapTokenService;
+use App\Services\Midtrans\CreateSnapTokenService;
+use config\Constant;
 use Illuminate\Http\Response;
 
 class TransactionController extends Controller
@@ -37,7 +38,7 @@ class TransactionController extends Controller
 
         return parent::getRespnse(Response::HTTP_CREATED, $token['message'], [
             'token' => $token['data'],
-            'redirect_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/".$token['data']
+            'redirect_url' => Constant::MIDTRANS_REDIRECT_URL.$token['data']
         ]);
     }
 

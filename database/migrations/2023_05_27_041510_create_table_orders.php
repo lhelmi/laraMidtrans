@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('quantity');
             $table->bigInteger('gross_amount');
             $table->bigInteger('price');
+            $table->integer('status');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

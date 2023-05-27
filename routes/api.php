@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PaymentCallbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,6 @@ use App\Http\Controllers\TransactionController;
 
 Route::prefix('admin')->group(function () {
     Route::post('/getTokenTransaction', [TransactionController::class, 'getTransactionToken']);
+    Route::post('/midtrans-notofication', [PaymentCallbackController::class, 'receive']);
 });
 

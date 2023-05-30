@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->unsignedBigInteger('merchant_id');
-            $table->bigInteger('price');
+            $table->decimal('price');
             $table->integer('quantity');
             $table->timestamps();
 

@@ -34,16 +34,16 @@ class MidtransRepository extends Repository
             $temp[$key]["id"] = $value->id;
             $temp[$key]["name"] = $value->name;
             $temp[$key]["price"] = $value->price;
-            $temp[$key]["quantity"] = $value->quantity;
+            $temp[$key]["quantity"] = $request[$key]['quantity'];
             $temp[$key]["merchant_id"] = $value->merchant_id;
-            $temp[$key]["quantity_amount"] = $request[$key]['quantity'];
+            $temp[$key]["quantity_amount"] = $value->quantity;
             $temp[$key]["total"] = $value->price * $request[$key]['quantity'];
             $total += $temp[$key]["total"];
         }
         $res = [
             'detail' => $temp,
             'total_amount' => $total,
-            'order_id' => rand()
+            'number' => rand()
         ];
         return $res;
     }
@@ -54,13 +54,14 @@ class MidtransRepository extends Repository
         foreach ($data['detail'] as $key => $value) {
             try {
                 $order = new Order();
-                $order->user_id = 2;
+                $order->user_id = 1;
                 $order->product_id = $value['id'];
                 $order->merchant_id = $value['merchant_id'];
-                $order->quantity = $value['quantity_amount'];
-                $order->gross_amount = $value['total'];
+                $order->quantity = $value['quantity'];
+                $order->gross_amount = $data['total_amount'];
                 $order->price = $value['price'];
                 $order->status = 0;
+                $order->number = $data['number'];
 
                 $order->save();
             } catch (\Throwable $th) {
@@ -73,15 +74,26 @@ class MidtransRepository extends Repository
         return parent::response(true, "order saved", null);
     }
 
-    public function updateOrderById($id, $param){
+    public function updateOrderByNumber($id, $param){
         DB::beginTransaction();
         try {
-            Order::where('id', $id)->update($param);
+            Order::where('number', $id)->update($param);
             DB::commit();
             return parent::response(true, "order updated", null);
         } catch (\Throwable $th) {
             DB::rollBack();
             return parent::response(false, $th->getMessage(), null);
         }
+    }
+
+    public function createSignature($number, $total, $status){
+        $orderId = $number;
+        $statusCode = $status;
+        $grossAmount = $total;
+        $serverKey = env('MIDTRANS_SERVER_KEY ');
+        $input = $orderId . $statusCode . $grossAmount . $serverKey;
+        $signature = openssl_digest($input, 'sha512');
+
+        return $signature;
     }
 }

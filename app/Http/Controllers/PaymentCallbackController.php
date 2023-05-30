@@ -23,25 +23,29 @@ class PaymentCallbackController extends Controller
 
     public function receive()
     {
-        $callback = new CallbackMidtransService;
+        $callback = new CallbackMidtransService();
 
         if ($callback->isSignatureKeyVerified()) {
-            // $notification = $callback->getNotification();
+            $notification = $callback->getNotification();
             $order = $callback->getOrder();
             $param['status'] = 0;
+            $save= [
+                'res' => false,
+                'message' => 'Save Order Fail'
+            ];
             if ($callback->isSuccess()) {
                 $param['status'] = 1;
-                $save = $this->repository->updateOrderById($order->id, $param);
+                $save = $this->repository->updateOrderByNumber($order->number, $param);
             }
 
             if ($callback->isExpire()) {
                 $param['status'] = 2;
-                $save = $this->repository->updateOrderById($order->id, $param);
+                $save = $this->repository->updateOrderByNumber($order->number, $param);
             }
 
             if ($callback->isCancelled()) {
                 $param['status'] = 3;
-                $save = $this->repository->updateOrderById($order->id, $param);
+                $save = $this->repository->updateOrderByNumber($order->number, $param);
             }
             if(!$save['res']) return parent::getRespnse(Response::HTTP_INTERNAL_SERVER_ERROR, $save['message'], null);
 
@@ -51,4 +55,9 @@ class PaymentCallbackController extends Controller
             return parent::getRespnse(Response::HTTP_FORBIDDEN, "Signature key tidak terverifikasi", null);
         }
     }
+
+    // public function getSignatureKey(){
+    //     return parent::getRespnse(Response::HTTP_FORBIDDEN, "Signature key tidak terverifikasi", null);
+    //     getSignatureKey
+    // }
 }

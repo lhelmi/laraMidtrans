@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('number');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('merchant_id');
             $table->bigInteger('quantity');
-            $table->bigInteger('gross_amount');
-            $table->bigInteger('price');
-            $table->integer('status');
+            $table->decimal('gross_amount');
+            $table->decimal('price', 10, 2);
+            $table->enum('status', ['0', '1', '2', '3'])->comment('0=proses/menunggu pembayaran, 1=sudah/sukses dibayar, 3=expired/kadaluarsa, 4=batal');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

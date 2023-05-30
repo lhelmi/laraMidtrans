@@ -24,5 +24,6 @@ use App\Http\Controllers\PaymentCallbackController;
 Route::prefix('admin')->group(function () {
     Route::post('/getTokenTransaction', [TransactionController::class, 'getTransactionToken']);
     Route::post('/midtrans-notofication', [PaymentCallbackController::class, 'receive']);
+    Route::post('/create-signature', [PaymentCallbackController::class, 'receive']);
 });
 

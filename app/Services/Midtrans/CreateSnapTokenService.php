@@ -16,7 +16,7 @@ class CreateSnapTokenService extends Midtrans{
     {
         $params = [
             'transaction_details' => [
-                'order_id' => $this->order['order_id'],
+                'order_id' => $this->order['number'],
                 'gross_amount' => $this->order['total_amount'],
             ],
             'item_details' => $this->order['detail'],
@@ -34,8 +34,6 @@ class CreateSnapTokenService extends Midtrans{
         } catch (\Throwable $th) {
             return parent::response(false, $th->getMessage(), null);
         }
-
-
     }
 
 }

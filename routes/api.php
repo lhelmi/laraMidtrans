@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentCallbackController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,6 +23,12 @@ use App\Http\Controllers\PaymentCallbackController;
 Route::prefix('admin')->group(function () {
     Route::post('/getTokenTransaction', [TransactionController::class, 'getTransactionToken']);
     Route::post('/midtrans-notofication', [PaymentCallbackController::class, 'receive']);
-    Route::post('/create-signature', [PaymentCallbackController::class, 'receive']);
+    // Route::post('/create-signature', [PaymentCallbackController::class, 'receive']);
+});
+
+
+Route::get('/test', function() {
+    \Log::channel('nicesnippets')->info('This is testing for nicesnippets.com!');
+    dd('done');
 });
 

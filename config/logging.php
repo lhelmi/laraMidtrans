@@ -118,6 +118,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'mailLog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/mailLog.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 1,
+            'replace_placeholders' => true,
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

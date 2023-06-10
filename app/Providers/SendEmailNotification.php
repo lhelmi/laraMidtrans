@@ -8,15 +8,26 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Mail\mailMidtrans;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Bus\Queueable;
 
-class SendEmailNotification
+class SendEmailNotification implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     /**
      * Create the event listener.
      */
     public function __construct()
     {
         //
+    }
+
+    public $tries = 3;
+
+    public function backoff(): array
+    {
+        return [1, 5, 10];
     }
 
     /**
@@ -32,10 +43,10 @@ class SendEmailNotification
                     $event->to
                 ],
                 'title' => $event->title,
-                'message' => $mail
+                'message' => "success"
             ];
             Log::channel('mailLog')->info(json_encode($log));
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             $log = [
                 'detail' => $event->detail,
                 'to' => [
@@ -45,6 +56,7 @@ class SendEmailNotification
                 'message' => $th->getMessage()
             ];
             Log::channel('mailLog')->info(json_encode($log));
+            throw $th->getMessage();
         }
 
     }

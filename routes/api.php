@@ -27,8 +27,8 @@ Route::prefix('admin')->group(function () {
 });
 
 
-Route::get('/test', function() {
-    \Log::channel('nicesnippets')->info('This is testing for nicesnippets.com!');
-    dd('done');
-});
+// Route::get('/test', function() {
+//     \Log::channel('nicesnippets')->info('This is testing for nicesnippets.com!');
+//     dd('done');
+// });
 

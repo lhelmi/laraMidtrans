@@ -126,6 +126,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'loginLog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/loginLog.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+            'replace_placeholders' => true,
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,

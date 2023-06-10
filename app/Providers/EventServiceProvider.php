@@ -18,9 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        MidtransReceiver::class => [
-            SendEmailNotification::class,
+        LoginHistory::class => [
+            CreateLoginHistory::class,
         ],
+        // MidtransReceiver::class => [
+        //     SendEmailNotification::class,
+        // ],
     ];
 
     /**

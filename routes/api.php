@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentCallbackController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,8 +21,17 @@ use App\Http\Controllers\PaymentCallbackController;
 //     return $request->user();
 // });
 
+Route::middleware(['auth:api'])->prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login'])->withoutMiddleware(['auth:api']);
+    Route::post('register', [AuthController::class, 'register'])->withoutMiddleware(['auth:api']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('profile', [AuthController::class, 'user']);
+});
 
-Route::prefix('admin')->group(function () {
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'admin'
+], function() {
     Route::post('/getTokenTransaction', [TransactionController::class, 'getTransactionToken']);
     Route::post('/midtrans-notofication', [PaymentCallbackController::class, 'receive']);
     // Route::post('/create-signature', [PaymentCallbackController::class, 'receive']);

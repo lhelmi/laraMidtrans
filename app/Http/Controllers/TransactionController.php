@@ -34,8 +34,6 @@ class TransactionController extends Controller
         $token = $service->getSnapToken();
         if(!$token['res']) return parent::getRespnse(Response::HTTP_INTERNAL_SERVER_ERROR, $token['message'], null);
 
-
-
         $signatureParam = $products['data'];
         $signature = $this->repository->createSignature($signatureParam['number'], $signatureParam['total_amount'], 200);
 

@@ -24,7 +24,7 @@ use App\Http\Controllers\PaymentCallbackController;
 Route::middleware(['auth:api'])->prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->withoutMiddleware(['auth:api']);
     Route::post('register', [AuthController::class, 'register'])->withoutMiddleware(['auth:api']);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('logout', [AuthController::class, 'logout']);
     Route::get('profile', [AuthController::class, 'user']);
 });
 

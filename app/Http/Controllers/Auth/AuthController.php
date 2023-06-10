@@ -61,7 +61,9 @@ class AuthController extends Controller
 
    public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        event(new LoginHistory('logout'));
+        // $request->user()->token()->revoke();
+
         return parent::getRespnse(Response::HTTP_OK, "Successfully logged out", null);
     }
 
